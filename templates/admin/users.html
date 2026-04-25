@@ -1,0 +1,49 @@
+{% extends 'admin/base.html' %}
+{% block title %}Usuarios{% endblock %}
+{% block page_title %}Usuarios{% endblock %}
+{% block topbar_actions %}<a href="{{ url_for('admin_user_new') }}" class="btn btn-primary">+ Nuevo usuario</a>{% endblock %}
+{% block content %}
+<div class="admin-card">
+  {% if users %}
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>Usuario</th><th>Email</th><th>Rol</th><th>Estado</th><th>Creado</th><th>Acciones</th></tr></thead>
+      <tbody>
+      {% for u in users %}
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--diu-pale, #dde9f7);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:#1a4a8a;flex-shrink:0">
+              {{ u.name[0].upper() }}
+            </div>
+            <strong>{{ u.name }}</strong>
+          </div>
+        </td>
+        <td style="color:var(--g600)">{{ u.email }}</td>
+        <td>
+          {% if u.role == 'admin' %}<span class="badge badge-navy">Admin</span>
+          {% elif u.role == 'staff' %}<span class="badge badge-blue">Staff</span>
+          {% else %}<span class="badge badge-gray">Cliente</span>{% endif %}
+        </td>
+        <td>{% if u.active %}<span class="badge badge-green">Activo</span>{% else %}<span class="badge badge-red">Inactivo</span>{% endif %}</td>
+        <td style="font-size:12px;color:var(--g400)">{{ u.created_at[:10] }}</td>
+        <td>
+          <div style="display:flex;gap:6px">
+            <a href="{{ url_for('admin_user_edit', uid=u.id) }}" class="btn btn-secondary btn-sm">Editar</a>
+            {% if current_user_role == 'admin' and u.id != current_user_id %}
+            <form method="post" action="{{ url_for('admin_user_delete', uid=u.id) }}" onsubmit="return confirm('¿Desactivar usuario?')">
+              <button type="submit" class="btn btn-danger btn-sm">✕</button>
+            </form>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="admin-empty"><div class="admin-empty-icon">👤</div><h3>Sin usuarios</h3></div>
+  {% endif %}
+</div>
+{% endblock %}

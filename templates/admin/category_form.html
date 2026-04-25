@@ -1,0 +1,50 @@
+{% extends 'admin/base.html' %}
+{% block title %}{{ 'Editar' if cat else 'Nueva' }} categoría{% endblock %}
+{% block page_title %}{{ 'Editar categoría' if cat else 'Nueva categoría' }}{% endblock %}
+{% block breadcrumb %}<div class="admin-breadcrumb"><a href="{{ url_for('admin_categories') }}">Categorías</a> › {{ 'Editar' if cat else 'Nueva' }}</div>{% endblock %}
+{% block topbar_actions %}<a href="{{ url_for('admin_categories') }}" class="btn btn-secondary">← Volver</a>{% endblock %}
+{% block content %}
+<div style="max-width:600px">
+<form method="post">
+  <div class="admin-card">
+    <div class="admin-card-header"><div class="admin-card-title">Datos de la categoría</div></div>
+    <div class="admin-card-body" style="display:flex;flex-direction:column;gap:16px">
+      <div class="form-group">
+        <label class="form-label">Nombre *</label>
+        <input type="text" name="name" class="form-input" required value="{{ cat.name if cat else '' }}" placeholder="Ej: Laboratorio-Farma">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Descripción</label>
+        <textarea name="description" class="form-textarea" rows="2">{{ cat.description if cat else '' }}</textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+        <div class="form-group">
+          <label class="form-label">Ícono (emoji)</label>
+          <input type="text" name="icon" class="form-input" value="{{ cat.icon if cat else '📦' }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color</label>
+          <input type="color" name="color" class="form-input" style="height:42px;padding:4px"
+                 value="{{ cat.color if cat else '#1a4a8a' }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Orden</label>
+          <input type="number" name="sort_order" class="form-input" min="0"
+                 value="{{ cat.sort_order if cat else '0' }}">
+        </div>
+      </div>
+      {% if cat %}
+      <label class="form-check">
+        <input type="checkbox" name="active" value="1" {% if cat.active %}checked{% endif %}>
+        Categoría activa
+      </label>
+      {% endif %}
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:16px">
+    <button type="submit" class="btn btn-primary">{{ '💾 Guardar' if cat else '✓ Crear' }}</button>
+    <a href="{{ url_for('admin_categories') }}" class="btn btn-secondary">Cancelar</a>
+  </div>
+</form>
+</div>
+{% endblock %}

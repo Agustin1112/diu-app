@@ -1,0 +1,39 @@
+{% extends 'admin/base.html' %}
+{% block title %}Novedades{% endblock %}
+{% block page_title %}Novedades{% endblock %}
+{% block topbar_actions %}<a href="{{ url_for('admin_news_new') }}" class="btn btn-primary">+ Nueva novedad</a>{% endblock %}
+{% block content %}
+<div class="admin-card">
+  {% if news %}
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>Novedad</th><th>Badge</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead>
+      <tbody>
+      {% for n in news %}
+      <tr>
+        <td>
+          <span style="font-size:20px;margin-right:8px">{{ n.icon }}</span>
+          <strong>{{ n.title }}</strong><br>
+          <span style="font-size:12px;color:var(--g400)">{{ n.summary or '' }}</span>
+        </td>
+        <td>{% if n.badge %}<span class="badge {{ n.badge_color }}">{{ n.badge }}</span>{% endif %}</td>
+        <td>{% if n.active %}<span class="badge badge-green">Activa</span>{% else %}<span class="badge badge-red">Inactiva</span>{% endif %}</td>
+        <td style="font-size:12px;color:var(--g400)">{{ n.created_at[:10] }}</td>
+        <td>
+          <div style="display:flex;gap:6px">
+            <a href="{{ url_for('admin_news_edit', nid=n.id) }}" class="btn btn-secondary btn-sm">Editar</a>
+            <form method="post" action="{{ url_for('admin_news_delete', nid=n.id) }}" onsubmit="return confirm('¿Desactivar?')">
+              <button type="submit" class="btn btn-danger btn-sm">✕</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="admin-empty"><div class="admin-empty-icon">📰</div><h3>Sin novedades</h3></div>
+  {% endif %}
+</div>
+{% endblock %}

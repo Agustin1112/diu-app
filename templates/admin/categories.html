@@ -1,0 +1,47 @@
+<!-- categories.html -->
+{% if request.endpoint == 'admin_categories' %}
+{% extends 'admin/base.html' %}
+{% block title %}Categorías{% endblock %}
+{% block page_title %}Categorías{% endblock %}
+{% block topbar_actions %}<a href="{{ url_for('admin_category_new') }}" class="btn btn-primary">+ Nueva categoría</a>{% endblock %}
+{% block content %}
+<div class="admin-card">
+  {% if cats %}
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>Categoría</th><th>Slug</th><th>Productos</th><th>Orden</th><th>Estado</th><th>Acciones</th></tr></thead>
+      <tbody>
+      {% for c in cats %}
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:24px">{{ c.icon }}</span>
+            <div>
+              <strong>{{ c.name }}</strong><br>
+              <span style="font-size:11px;color:var(--g400)">{{ c.description or '' }}</span>
+            </div>
+          </div>
+        </td>
+        <td><code style="font-size:12px;background:var(--g100);padding:2px 6px;border-radius:4px">{{ c.slug }}</code></td>
+        <td><span style="font-weight:600;color:var(--navy)">{{ c.product_count }}</span></td>
+        <td>{{ c.sort_order }}</td>
+        <td>{% if c.active %}<span class="badge badge-green">Activa</span>{% else %}<span class="badge badge-red">Inactiva</span>{% endif %}</td>
+        <td>
+          <div style="display:flex;gap:6px">
+            <a href="{{ url_for('admin_category_edit', cid=c.id) }}" class="btn btn-secondary btn-sm">Editar</a>
+            <form method="post" action="{{ url_for('admin_category_delete', cid=c.id) }}" onsubmit="return confirm('¿Desactivar categoría?')">
+              <button type="submit" class="btn btn-danger btn-sm">✕</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="admin-empty"><div class="admin-empty-icon">🏷️</div><h3>Sin categorías</h3></div>
+  {% endif %}
+</div>
+{% endblock %}
+{% endif %}

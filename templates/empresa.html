@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}La Empresa{% endblock %}
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="{{ url_for('index') }}">Inicio</a><span class="breadcrumb-sep">›</span><span>La empresa</span></div>
+    <h1 style="font-family:var(--font-display);font-size:36px;font-weight:800;color:var(--diu-navy);margin-top:12px">Droguería Industrial Uruguaya</h1>
+    <p style="font-size:15px;color:var(--gray-600);margin-top:6px">Pionera en su sector desde 1935 · 90 años de historia</p>
+  </div>
+</div>
+
+<section class="section-pad">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-main-card">
+          <div class="about-year">1935</div>
+          <div class="about-since">Nueve décadas de historia</div>
+          <p class="about-card-text">Droguería Industrial Uruguaya nació con la vocación de proveer insumos de calidad al sector industrial y científico. Desde nuestros inicios hemos acompañado el desarrollo del Uruguay productivo.</p>
+        </div>
+        <div class="about-float-card"><div class="about-float-icon">🏆</div><div><div class="about-float-num">90</div><div class="about-float-label">años de trayectoria</div></div></div>
+      </div>
+      <div class="about-content reveal anim-delay-2">
+        <div class="label-sm">Nuestra historia</div>
+        <h2 class="title-lg" style="margin-top:10px;margin-bottom:16px">Una empresa familiar con vocación de servicio</h2>
+        <p class="body-lg" style="margin-bottom:20px">DIU es hoy la droguería con mayor trayectoria del Uruguay. Durante décadas hemos construido relaciones de confianza con nuestros clientes, basadas en la calidad de nuestros productos y el conocimiento técnico de nuestro equipo.</p>
+        <div class="about-pillars">
+          <div class="pillar"><div class="pillar-icon">🏆</div><div><h4>90 años de confianza</h4><p>Empresa familiar con décadas de trayectoria en el sector.</p></div></div>
+          <div class="pillar"><div class="pillar-icon">🔬</div><div><h4>Calidad certificada</h4><p>Todos nuestros productos cuentan con certificados y hojas de seguridad.</p></div></div>
+          <div class="pillar"><div class="pillar-icon">🚚</div><div><h4>Envíos a todo Uruguay</h4><p>Distribuimos en todo el territorio nacional.</p></div></div>
+        </div>
+        <div style="margin-top:32px"><a href="{{ url_for('contacto') }}" class="btn btn-primary">Contactarnos <span class="arrow">→</span></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad" style="background:var(--gray-50)">
+  <div class="container">
+    <div class="divisions-header reveal">
+      <div class="label-sm">Nuestras divisiones</div>
+      <h2 class="title-lg" style="margin-top:10px">Cuatro áreas de especialización</h2>
+    </div>
+    <div class="divisions-grid">
+      {% for cat in categories %}
+      <a href="{{ url_for('shop', cat=cat.slug) }}" class="division-card reveal">
+        <div class="division-icon-wrap" style="background:{{ cat.color }}22">{{ cat.icon }}</div>
+        <h3>{{ cat.name }}</h3>
+        <p>{{ cat.description or '' }}</p>
+        <div class="division-link" style="color:{{ cat.color }}">Ver productos <span class="arrow">→</span></div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section-pad cta-section">
+  <div class="container">
+    <div class="cta-inner">
+      <div><div class="label-sm">Sumate al equipo</div><h2 class="title-lg" style="margin-top:10px">Trabajá con nosotros</h2><p style="margin-top:12px;color:rgba(255,255,255,.6)">Somos una empresa en constante crecimiento.</p></div>
+      <a href="{{ url_for('contacto') }}" class="btn btn-white btn-lg">Enviar mi CV <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+{% endblock %}

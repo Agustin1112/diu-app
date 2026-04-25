@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-inner container">
+    <div class="hero-text">
+      <div class="hero-label anim-fade-in">
+        <div class="hero-label-line"></div>
+        <span class="label-sm">Desde 1935 · 90 años de trayectoria</span>
+      </div>
+      <h1 class="title-xl anim-fade-up anim-delay-1">Insumos químicos<br>e industriales<br>para Uruguay</h1>
+      <p class="body-lg hero-desc anim-fade-up anim-delay-2">DIU es la droguería de referencia en Uruguay. Cuatro divisiones especializadas, miles de productos y envíos a todo el país desde hace 90 años.</p>
+      <div class="hero-btns anim-fade-up anim-delay-3">
+        <a href="{{ url_for('shop') }}" class="btn btn-primary btn-lg">Ver tienda <span class="arrow">→</span></a>
+        <a href="{{ url_for('empresa') }}" class="btn btn-secondary btn-lg">Conocé DIU</a>
+      </div>
+      <div class="hero-stats anim-fade-up anim-delay-4">
+        <div><div class="hero-stat-num">90+</div><div class="hero-stat-label">Años de experiencia</div></div>
+        <div><div class="hero-stat-num">{{ cats|length }}</div><div class="hero-stat-label">Divisiones</div></div>
+        <div><div class="hero-stat-num">Miles</div><div class="hero-stat-label">De productos</div></div>
+        <div><div class="hero-stat-num">Todo UY</div><div class="hero-stat-label">Envíos nacionales</div></div>
+      </div>
+    </div>
+    <div class="hero-visual anim-fade-up anim-delay-3">
+      <div class="hero-card-main">
+        <div class="hero-card-header">
+          <div class="hero-card-icon" style="background:var(--diu-pale)">🧪</div>
+          <div><div class="hero-card-main-title">Divisiones DIU</div><div class="body-sm">Soluciones especializadas</div></div>
+        </div>
+        <div class="hero-division-list">
+          {% for cat in cats %}
+          <a href="{{ url_for('shop', cat=cat.slug) }}" class="hero-div-item">
+            <span>{{ cat.icon }} {{ cat.name }}</span>
+            <div class="hero-div-dot" style="background:{{ cat.color }}"></div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="hero-cards-row">
+        <div class="hero-mini-card">
+          <div class="hero-mini-card-top"><span class="hero-mini-icon">🚚</span></div>
+          <div class="hero-mini-num">UY</div>
+          <div class="hero-mini-label">Envíos a todo el país</div>
+        </div>
+        <div class="hero-mini-card">
+          <div class="hero-mini-card-top"><span class="hero-mini-icon">🏆</span></div>
+          <div class="hero-mini-num">1935</div>
+          <div class="hero-mini-label">Fundada en Montevideo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BAND -->
+<div class="band">
+  <div class="band-inner container">
+    <div class="band-stat"><div class="band-num">90+</div><div class="band-label">Años en el mercado</div></div>
+    <div class="band-stat"><div class="band-num">{{ cats|length }}</div><div class="band-label">Divisiones especializadas</div></div>
+    <div class="band-stat"><div class="band-num">16+</div><div class="band-label">Marcas representadas</div></div>
+    <div class="band-stat"><div class="band-num">Todo UY</div><div class="band-label">Cobertura nacional</div></div>
+    <div class="band-stat"><div class="band-num">1024</div><div class="band-label">Paysandú, Montevideo</div></div>
+  </div>
+</div>
+
+<!-- DIVISIONES -->
+<section class="section-pad">
+  <div class="container">
+    <div class="divisions-header reveal">
+      <div class="label-sm">Nuestras divisiones</div>
+      <h2 class="title-lg" style="margin-top:10px">Soluciones para cada industria</h2>
+      <p class="body-md" style="max-width:500px;margin:12px auto 0">Cuatro áreas especializadas con productos específicos y asesoramiento técnico.</p>
+    </div>
+    <div class="divisions-grid">
+      {% for cat in cats %}
+      <a href="{{ url_for('shop', cat=cat.slug) }}" class="division-card reveal" style="--div-color:{{ cat.color }}">
+        <div class="division-icon-wrap" style="background:{{ cat.color }}22">{{ cat.icon }}</div>
+        <h3>{{ cat.name }}</h3>
+        <p>{{ cat.description or '' }}</p>
+        <div class="division-link" style="color:{{ cat.color }}">Ver productos <span class="arrow">→</span></div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTOS DESTACADOS -->
+{% if featured %}
+<section class="section-pad store-section">
+  <div class="container">
+    <div class="store-header reveal">
+      <div>
+        <div class="label-sm">Tienda online</div>
+        <h2 class="title-lg" style="margin-top:10px">Productos destacados</h2>
+      </div>
+      <a href="{{ url_for('shop') }}" class="btn btn-secondary">Ver todos <span class="arrow">→</span></a>
+    </div>
+    <div class="products-grid">
+      {% for p in featured %}
+      <div class="product-card reveal" data-id="{{ p.id }}">
+        <div class="product-img" style="background:{{ p.color }}22">{{ p.icon }}</div>
+        <div class="product-body">
+          <span class="badge" style="background:{{ p.color }}22;color:{{ p.color }}">{{ p.cat_name }}</span>
+          <h4>{{ p.name }}</h4>
+          <p>{{ p.unit or '' }}{% if p.description %} · {{ p.description[:60] }}{% endif %}</p>
+        </div>
+        <div class="product-footer">
+          <div>
+            <div class="product-price-label">Precio</div>
+            <div class="product-price">{% if p.price %}${{ "%.2f"|format(p.price) }}{% else %}Consultar{% endif %}</div>
+          </div>
+          <button class="add-to-cart js-add-cart" data-id="{{ p.id }}" data-name="{{ p.name }}" title="Agregar al carrito">+</button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- NOVEDADES -->
+{% if news_items %}
+<section class="section-pad" style="background:var(--gray-50)">
+  <div class="container">
+    <div class="store-header reveal">
+      <div>
+        <div class="label-sm">Novedades</div>
+        <h2 class="title-lg" style="margin-top:10px">Últimas noticias</h2>
+      </div>
+      <a href="{{ url_for('novedades') }}" class="btn btn-secondary">Ver todas <span class="arrow">→</span></a>
+    </div>
+    <div class="news-grid reveal">
+      <div class="news-card featured">
+        <div class="news-card-img" style="background:var(--diu-palest)">{{ news_items[0].icon }}</div>
+        <div class="news-card-body">
+          <div class="news-meta">
+            <span class="badge {{ news_items[0].badge_color }}">{{ news_items[0].badge }}</span>
+            <div class="news-dot"></div>
+            <span>{{ news_items[0].created_at[:10] }}</span>
+          </div>
+          <h3>{{ news_items[0].title }}</h3>
+          <p>{{ news_items[0].summary or '' }}</p>
+        </div>
+      </div>
+      <div class="news-sidebar">
+        {% for n in news_items[1:4] %}
+        <div class="news-mini-card">
+          <div class="news-mini-icon" style="background:var(--diu-palest)">{{ n.icon }}</div>
+          <div>
+            <h4>{{ n.title }}</h4>
+            <p>{{ n.created_at[:10] }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- CTA -->
+<section class="section-pad cta-section">
+  <div class="container">
+    <div class="cta-inner">
+      <div>
+        <div class="label-sm">Soporte empresarial</div>
+        <h2 class="title-lg" style="margin-top:10px">¿Necesitás asesoramiento<br>o compras al por mayor?</h2>
+        <div class="cta-contact-info" style="margin-top:20px">
+          <div class="cta-contact-row"><span>📞</span><span>{{ site.site_phone }}</span></div>
+          <div class="cta-contact-row"><span>✉️</span><span>{{ site.site_email }}</span></div>
+          <div class="cta-contact-row"><span>📍</span><span>{{ site.site_address }}</span></div>
+        </div>
+      </div>
+      <div class="cta-actions">
+        <a href="{{ url_for('contacto') }}" class="btn btn-white btn-lg">Contactar ahora <span class="arrow">→</span></a>
+        <a href="{{ url_for('shop') }}" class="btn btn-outline-white btn-lg">Ver tienda</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

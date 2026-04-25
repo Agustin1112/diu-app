@@ -1,0 +1,71 @@
+{% extends 'admin/base.html' %}
+{% block title %}Pedido #{{ order.id }}{% endblock %}
+{% block page_title %}Pedido #{{ order.id }}{% endblock %}
+{% block breadcrumb %}<div class="admin-breadcrumb"><a href="{{ url_for('admin_orders') }}">Pedidos</a> › #{{ order.id }}</div>{% endblock %}
+{% block topbar_actions %}<a href="{{ url_for('admin_orders') }}" class="btn btn-secondary">← Volver</a>{% endblock %}
+{% block content %}
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:flex-start">
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <!-- ITEMS -->
+    <div class="admin-card">
+      <div class="admin-card-header"><div class="admin-card-title">Productos solicitados</div></div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Producto</th><th>Unidad</th><th>Cantidad</th></tr></thead>
+          <tbody>
+          {% for item in items %}
+          <tr>
+            <td><span style="font-size:20px;margin-right:8px">{{ item.icon }}</span><strong>{{ item.name }}</strong></td>
+            <td style="color:var(--g600)">{{ item.unit or '—' }}</td>
+            <td><strong>{{ item.qty }}</strong></td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- NOTES -->
+    {% if order.notes %}
+    <div class="admin-card">
+      <div class="admin-card-header"><div class="admin-card-title">Notas del cliente</div></div>
+      <div class="admin-card-body"><p style="color:var(--g600)">{{ order.notes }}</p></div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <!-- STATUS -->
+    <div class="admin-card">
+      <div class="admin-card-header"><div class="admin-card-title">Estado del pedido</div></div>
+      <div class="admin-card-body">
+        <div style="margin-bottom:12px"><span class="badge status-{{ order.status }}" style="font-size:14px;padding:6px 14px">{{ order.status }}</span></div>
+        <form method="post" action="{{ url_for('admin_order_status', oid=order.id) }}">
+          <div class="form-group" style="margin-bottom:12px">
+            <label class="form-label">Cambiar estado</label>
+            <select name="status" class="form-select">
+              <option value="pending"   {% if order.status=='pending'   %}selected{% endif %}>Pendiente</option>
+              <option value="confirmed" {% if order.status=='confirmed' %}selected{% endif %}>Confirmado</option>
+              <option value="shipped"   {% if order.status=='shipped'   %}selected{% endif %}>Enviado</option>
+              <option value="delivered" {% if order.status=='delivered' %}selected{% endif %}>Entregado</option>
+              <option value="cancelled" {% if order.status=='cancelled' %}selected{% endif %}>Cancelado</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Actualizar estado</button>
+        </form>
+      </div>
+    </div>
+    <!-- CLIENTE -->
+    <div class="admin-card">
+      <div class="admin-card-header"><div class="admin-card-title">Datos del cliente</div></div>
+      <div class="admin-card-body" style="display:flex;flex-direction:column;gap:10px">
+        {% macro row(label, val) %}{% if val %}<div><div style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--g400);margin-bottom:2px">{{ label }}</div><div style="font-size:14px;color:var(--navy)">{{ val }}</div></div>{% endif %}{% endmacro %}
+        {{ row('Nombre', order.name) }}
+        {{ row('Email', order.email) }}
+        {{ row('Teléfono', order.phone) }}
+        {{ row('Empresa', order.company) }}
+        {{ row('Fecha', order.created_at[:16]) }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

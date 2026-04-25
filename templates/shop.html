@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}Tienda{% endblock %}
+{% block content %}
+
+<div class="page-hero">
+  <div class="container">
+    <div class="page-hero-inner">
+      <div>
+        <div class="breadcrumb"><a href="{{ url_for('index') }}">Inicio</a><span class="breadcrumb-sep">›</span><span>Tienda</span>{% if current_cat %}<span class="breadcrumb-sep">›</span><span>{{ current_cat.name }}</span>{% endif %}</div>
+        <h1>{% if current_cat %}{{ current_cat.icon }} {{ current_cat.name }}{% else %}Tienda online{% endif %}</h1>
+        <p>{{ total }} producto{{ 's' if total != 1 else '' }} disponible{{ 's' if total != 1 else '' }} · Envíos a todo Uruguay</p>
+      </div>
+      <div style="position:relative">
+        <form method="get" action="{{ url_for('shop') }}">
+          {% if cat_slug %}<input type="hidden" name="cat" value="{{ cat_slug }}">{% endif %}
+          <input type="text" name="q" value="{{ search }}" placeholder="Buscar producto..." style="padding:11px 16px 11px 40px;border:1.5px solid var(--gray-200);border-radius:var(--r-md);font-size:14px;font-family:var(--font-body);color:var(--gray-800);background:var(--white);outline:none;width:280px">
+          <span style="position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none">🔍</span>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section-pad" style="background:var(--gray-50)">
+  <div class="container">
+    <div class="store-layout">
+
+      <!-- SIDEBAR -->
+      <div>
+        <div class="sidebar-card">
+          <div class="sidebar-group">
+            <div class="sidebar-title">Categorías</div>
+            <a href="{{ url_for('shop') }}" class="sidebar-option {% if not cat_slug %}active{% endif %}">
+              <div class="dot" style="background:var(--diu-blue)"></div> Todos los productos
+            </a>
+            {% for cat in categories %}
+            <a href="{{ url_for('shop', cat=cat.slug) }}" class="sidebar-option {% if cat_slug == cat.slug %}active{% endif %}">
+              <div class="dot" style="background:{{ cat.color }}"></div> {{ cat.name }}
+            </a>
+            {% endfor %}
+          </div>
+          <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--gray-100)">
+            <div class="sidebar-title">¿Necesitás ayuda?</div>
+            <p style="font-size:13px;color:var(--gray-600);margin-bottom:12px;line-height:1.6">Para compras empresariales o grandes cantidades, contactá a nuestro equipo.</p>
+            <a href="{{ url_for('contacto') }}" class="btn btn-primary" style="width:100%;justify-content:center;font-size:13px;padding:10px 16px">Solicitar cotización</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div>
+        {% if search %}
+        <div style="margin-bottom:16px;font-size:14px;color:var(--gray-600)">
+          Resultados para "<strong>{{ search }}</strong>" · <a href="{{ url_for('shop') }}" style="color:var(--diu-blue)">Limpiar</a>
+        </div>
+        {% endif %}
+
+        {% if products %}
+        <div class="products-grid">
+          {% for p in products %}
+          <div class="product-card">
+            <a href="{{ url_for('product_detail', slug=p.slug) }}">
+              <div class="product-img" style="background:{{ p.color or '#f0f6fc' }}22">{{ p.icon }}</div>
+            </a>
+            <div class="product-body">
+              {% if p.cat_name %}
+              <span class="badge" style="background:{{ p.color }}22;color:{{ p.color }}">{{ p.cat_name }}</span>
+              {% endif %}
+              <h4><a href="{{ url_for('product_detail', slug=p.slug) }}" style="color:inherit">{{ p.name }}</a></h4>
+              <p>{{ p.unit or '' }}{% if p.description %} · {{ p.description[:55] }}{% endif %}</p>
+            </div>
+            <div class="product-footer">
+              <div>
+                <div class="product-price-label">Precio</div>
+                <div class="product-price">{% if p.price %}${{ "%.2f"|format(p.price) }}{% else %}Consultar{% endif %}</div>
+              </div>
+              <button class="add-to-cart js-add-cart" data-id="{{ p.id }}" title="Agregar al carrito">+</button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        {% if total_pages > 1 %}
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:32px">
+          {% for p in range(1, total_pages+1) %}
+          <a href="{{ url_for('shop', cat=cat_slug, q=search, page=p) }}"
+             style="padding:7px 13px;border-radius:var(--r-sm);border:1.5px solid {% if p == page %}var(--diu-blue){% else %}var(--gray-200){% endif %};background:{% if p == page %}var(--diu-palest){% else %}var(--white){% endif %};font-size:13px;font-weight:500;color:{% if p == page %}var(--diu-blue){% else %}var(--gray-600){% endif %}">{{ p }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div style="text-align:center;padding:64px 32px;color:var(--gray-400)">
+          <div style="font-size:40px;margin-bottom:12px">🔍</div>
+          <p style="font-size:15px">No se encontraron productos.</p>
+          <a href="{{ url_for('shop') }}" class="btn btn-secondary btn-sm" style="margin-top:16px">Ver todos los productos</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

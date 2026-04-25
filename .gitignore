@@ -1,0 +1,68 @@
+# ============================================================
+# DIU — .gitignore
+# ============================================================
+
+# Variables de entorno — NUNCA subir a git
+.env
+*.env
+
+# Base de datos SQLite
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Imágenes subidas por usuarios
+static/img/uploads/*
+!static/img/uploads/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Entornos virtuales
+venv/
+env/
+.venv/
+.env/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribución / packaging
+.eggs/
+*.egg-info/
+dist/
+build/
+*.egg
+*.whl
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Flask / Werkzeug
+flask_session/
+
+# Producción
+*.pid
+gunicorn.log

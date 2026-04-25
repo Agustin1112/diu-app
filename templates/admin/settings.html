@@ -1,0 +1,43 @@
+{% extends 'admin/base.html' %}
+{% block title %}Configuración{% endblock %}
+{% block page_title %}Configuración del sitio{% endblock %}
+{% block content %}
+<div style="max-width:620px">
+<form method="post">
+  <div class="admin-card">
+    <div class="admin-card-header"><div class="admin-card-title">Información general</div></div>
+    <div class="admin-card-body" style="display:flex;flex-direction:column;gap:16px">
+      <div class="form-group">
+        <label class="form-label">Nombre del sitio</label>
+        <input type="text" name="site_name" class="form-input" value="{{ settings.get('site_name','') }}">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="form-group">
+          <label class="form-label">Teléfono</label>
+          <input type="text" name="site_phone" class="form-input" value="{{ settings.get('site_phone','') }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" name="site_email" class="form-input" value="{{ settings.get('site_email','') }}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Dirección</label>
+        <input type="text" name="site_address" class="form-input" value="{{ settings.get('site_address','') }}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Facebook URL</label>
+        <input type="url" name="site_facebook" class="form-input" value="{{ settings.get('site_facebook','') }}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Instagram URL</label>
+        <input type="url" name="site_instagram" class="form-input" value="{{ settings.get('site_instagram','') }}">
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:16px">
+    <button type="submit" class="btn btn-primary">💾 Guardar configuración</button>
+  </div>
+</form>
+</div>
+{% endblock %}

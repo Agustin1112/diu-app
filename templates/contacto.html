@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Contacto{% endblock %}
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="{{ url_for('index') }}">Inicio</a><span class="breadcrumb-sep">›</span><span>Contacto</span></div>
+    <h1 style="font-family:var(--font-display);font-size:36px;font-weight:800;color:var(--diu-navy);margin-top:12px">Contacto</h1>
+    <p style="font-size:15px;color:var(--gray-600);margin-top:6px">Estamos para ayudarte · Respondemos en menos de 24 horas</p>
+  </div>
+</div>
+<section class="section-pad">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-form-card reveal">
+        <h2>Envianos un mensaje</h2>
+        <p>Completá el formulario y nuestro equipo te responderá a la brevedad.</p>
+        <form method="post" style="display:flex;flex-direction:column;gap:16px;margin-top:24px">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Nombre *</label><input type="text" name="name" class="form-input" required placeholder="Tu nombre"></div>
+            <div class="form-group"><label class="form-label">Email *</label><input type="email" name="email" class="form-input" required placeholder="correo@empresa.com"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Teléfono (opcional)</label><input type="tel" name="phone" class="form-input" placeholder="(598) 09X XXX XXX"></div>
+          <div class="form-group">
+            <label class="form-label">Tipo de consulta</label>
+            <select name="subject" class="form-input" style="cursor:pointer">
+              <option value="">Seleccioná una opción</option>
+              <option>Consulta de productos</option>
+              <option>Solicitar cotización</option>
+              <option>Compra empresarial / por mayor</option>
+              <option>Franquicias</option>
+              <option>Hojas de seguridad / Certificados</option>
+              <option>Trabajar en DIU</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Mensaje *</label><textarea name="message" class="form-textarea" required placeholder="Contanos en qué te podemos ayudar..."></textarea></div>
+          <button type="submit" class="btn btn-primary" style="justify-content:center">Enviar mensaje <span class="arrow">→</span></button>
+        </form>
+      </div>
+      <div class="reveal anim-delay-2">
+        <h3 style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--diu-navy);margin-bottom:24px">Información de contacto</h3>
+        <div class="contact-cards">
+          <div class="contact-info-card"><div class="contact-info-icon">📍</div><div><h4>Casa Central</h4><p>{{ site.site_address }}</p></div></div>
+          <div class="contact-info-card"><div class="contact-info-icon">📞</div><div><h4>Teléfono</h4><p>{{ site.site_phone }}</p><span>Lunes a viernes · 8:30 a 17:30</span></div></div>
+          <div class="contact-info-card"><div class="contact-info-icon">✉️</div><div><h4>Email</h4><p>{{ site.site_email }}</p></div></div>
+        </div>
+        <div style="margin-top:24px;padding:20px;background:var(--diu-palest);border-radius:var(--r-lg);border:1px solid var(--diu-pale)">
+          <div style="font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--diu-navy);margin-bottom:8px">🚚 Envíos a todo Uruguay</div>
+          <p style="font-size:13.5px;color:var(--gray-600);line-height:1.65">Realizamos envíos a todo el territorio nacional. Consultá condiciones, plazos y costos según tu ubicación.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'admin/base.html' %}
+{% block title %}Pedidos{% endblock %}
+{% block page_title %}Pedidos{% endblock %}
+{% block content %}
+<div class="admin-filters">
+  <form method="get" style="display:flex;gap:10px">
+    <select name="status" class="form-select" style="max-width:200px">
+      <option value="">Todos los estados</option>
+      <option value="pending"   {% if status=='pending'   %}selected{% endif %}>Pendientes</option>
+      <option value="confirmed" {% if status=='confirmed' %}selected{% endif %}>Confirmados</option>
+      <option value="shipped"   {% if status=='shipped'   %}selected{% endif %}>Enviados</option>
+      <option value="delivered" {% if status=='delivered' %}selected{% endif %}>Entregados</option>
+      <option value="cancelled" {% if status=='cancelled' %}selected{% endif %}>Cancelados</option>
+    </select>
+    <button type="submit" class="btn btn-secondary">Filtrar</button>
+    {% if status %}<a href="{{ url_for('admin_orders') }}" class="btn btn-secondary">Limpiar</a>{% endif %}
+  </form>
+</div>
+<div class="admin-card">
+  {% if orders %}
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>#</th><th>Cliente</th><th>Empresa</th><th>Items</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
+      <tbody>
+      {% for o in orders %}
+      <tr>
+        <td><strong style="color:var(--blue)">#{{ o.id }}</strong></td>
+        <td>
+          <strong>{{ o.name }}</strong><br>
+          <span style="font-size:12px;color:var(--g400)">{{ o.email }}</span>
+          {% if o.phone %}<br><span style="font-size:12px;color:var(--g400)">{{ o.phone }}</span>{% endif %}
+        </td>
+        <td style="color:var(--g600)">{{ o.company or '—' }}</td>
+        <td>{{ o.total_items }}</td>
+        <td><span class="badge status-{{ o.status }}">{{ o.status }}</span></td>
+        <td style="font-size:12px;color:var(--g400)">{{ o.created_at[:16] }}</td>
+        <td><a href="{{ url_for('admin_order_detail', oid=o.id) }}" class="btn btn-secondary btn-sm">Ver</a></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="admin-empty"><div class="admin-empty-icon">🛒</div><h3>Sin pedidos</h3><p>Todavía no hay pedidos.</p></div>
+  {% endif %}
+</div>
+{% endblock %}

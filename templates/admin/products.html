@@ -1,0 +1,91 @@
+{% extends 'admin/base.html' %}
+{% block title %}Productos{% endblock %}
+{% block page_title %}Productos{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ url_for('admin_product_new') }}" class="btn btn-primary">+ Nuevo producto</a>
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-filters">
+  <form method="get" style="display:flex;gap:10px;flex:1;flex-wrap:wrap">
+    <div class="admin-search">
+      <span class="admin-search-icon">🔍</span>
+      <input type="text" name="q" value="{{ search }}" placeholder="Buscar producto...">
+    </div>
+    <select name="cat" class="form-select" style="max-width:200px">
+      <option value="">Todas las categorías</option>
+      {% for c in cats %}
+      <option value="{{ c.slug }}" {% if cat_slug == c.slug %}selected{% endif %}>{{ c.name }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-secondary">Filtrar</button>
+    {% if search or cat_slug %}
+    <a href="{{ url_for('admin_products') }}" class="btn btn-secondary">Limpiar</a>
+    {% endif %}
+  </form>
+</div>
+
+<div class="admin-card">
+  {% if products %}
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead><tr>
+        <th>Producto</th><th>Categoría</th><th>Unidad</th><th>Stock</th><th>Destacado</th><th>Estado</th><th>Acciones</th>
+      </tr></thead>
+      <tbody>
+      {% for p in products %}
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:22px">{{ p.icon }}</span>
+            <div>
+              <strong>{{ p.name }}</strong><br>
+              <span style="font-size:11px;color:var(--g400)">{{ p.slug }}</span>
+            </div>
+          </div>
+        </td>
+        <td>
+          {% if p.cat_name %}
+          <span class="badge" style="background:{{ p.color }}22;color:{{ p.color }}">{{ p.cat_name }}</span>
+          {% else %}<span style="color:var(--g400)">—</span>{% endif %}
+        </td>
+        <td style="color:var(--g600)">{{ p.unit or '—' }}</td>
+        <td>
+          {% if p.stock > 0 %}
+          <span style="color:var(--success);font-weight:600">{{ p.stock }}</span>
+          {% else %}
+          <span style="color:var(--danger)">Sin stock</span>
+          {% endif %}
+        </td>
+        <td style="text-align:center">{% if p.featured %}⭐{% else %}—{% endif %}</td>
+        <td>
+          {% if p.active %}
+          <span class="badge badge-green">Activo</span>
+          {% else %}
+          <span class="badge badge-red">Inactivo</span>
+          {% endif %}
+        </td>
+        <td>
+          <div style="display:flex;gap:6px">
+            <a href="{{ url_for('admin_product_edit', pid=p.id) }}" class="btn btn-secondary btn-sm">Editar</a>
+            <form method="post" action="{{ url_for('admin_product_delete', pid=p.id) }}" onsubmit="return confirm('¿Desactivar este producto?')">
+              <button type="submit" class="btn btn-danger btn-sm">✕</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="admin-empty">
+    <div class="admin-empty-icon">📦</div>
+    <h3>Sin productos</h3>
+    <p>No hay productos que coincidan con la búsqueda.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

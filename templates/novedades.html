@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Novedades{% endblock %}
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="{{ url_for('index') }}">Inicio</a><span class="breadcrumb-sep">›</span><span>Novedades</span></div>
+    <h1 style="font-family:var(--font-display);font-size:36px;font-weight:800;color:var(--diu-navy);margin-top:12px">Novedades</h1>
+    <p style="font-size:15px;color:var(--gray-600);margin-top:6px">Noticias, avisos y novedades de DIU</p>
+  </div>
+</div>
+<section class="section-pad" style="background:var(--gray-50)">
+  <div class="container">
+    {% if news %}
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+      {% for n in news %}
+      <div class="news-card reveal">
+        <div class="news-card-img" style="background:var(--diu-palest)">{{ n.icon }}</div>
+        <div class="news-card-body">
+          <div class="news-meta">
+            {% if n.badge %}<span class="badge {{ n.badge_color }}">{{ n.badge }}</span><div class="news-dot"></div>{% endif %}
+            <span>{{ n.created_at[:10] }}</span>
+          </div>
+          <h3>{{ n.title }}</h3>
+          <p>{{ n.summary or '' }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align:center;padding:64px;color:var(--gray-400)"><div style="font-size:40px;margin-bottom:12px">📰</div><p>Sin novedades todavía.</p></div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

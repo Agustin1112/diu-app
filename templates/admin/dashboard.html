@@ -1,0 +1,133 @@
+{% extends 'admin/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ url_for('admin_product_new') }}" class="btn btn-primary btn-sm">+ Nuevo producto</a>
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-stats-grid">
+  <div class="admin-stat">
+    <div class="admin-stat-icon" style="background:#dde9f7">📦</div>
+    <div>
+      <div class="admin-stat-num">{{ stats.products }}</div>
+      <div class="admin-stat-label">Productos activos</div>
+    </div>
+  </div>
+  <div class="admin-stat">
+    <div class="admin-stat-icon" style="background:#d6f0e4">🏷️</div>
+    <div>
+      <div class="admin-stat-num">{{ stats.categories }}</div>
+      <div class="admin-stat-label">Categorías</div>
+    </div>
+  </div>
+  <div class="admin-stat">
+    <div class="admin-stat-icon" style="background:#fef0cc">🛒</div>
+    <div>
+      <div class="admin-stat-num">{{ stats.orders }}</div>
+      <div class="admin-stat-label">Pedidos totales</div>
+    </div>
+  </div>
+  <div class="admin-stat">
+    <div class="admin-stat-icon" style="background:#ede8fb">👤</div>
+    <div>
+      <div class="admin-stat-num">{{ stats.users }}</div>
+      <div class="admin-stat-label">Usuarios</div>
+    </div>
+  </div>
+  <div class="admin-stat">
+    <div class="admin-stat-icon" style="background:#fee2e2">✉️</div>
+    <div>
+      <div class="admin-stat-num">{{ stats.contacts }}</div>
+      <div class="admin-stat-label">Contactos sin leer</div>
+    </div>
+  </div>
+  <div class="admin-stat">
+    <div class="admin-stat-icon" style="background:#f0f6fc">📰</div>
+    <div>
+      <div class="admin-stat-num">{{ stats.news }}</div>
+      <div class="admin-stat-label">Novedades activas</div>
+    </div>
+  </div>
+</div>
+
+<div class="admin-dash-grid">
+
+  <!-- PEDIDOS RECIENTES -->
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <div class="admin-card-title">Pedidos recientes</div>
+      <a href="{{ url_for('admin_orders') }}" class="btn btn-secondary btn-sm">Ver todos →</a>
+    </div>
+    {% if recent_orders %}
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr>
+          <th>#</th><th>Cliente</th><th>Items</th><th>Estado</th><th>Fecha</th>
+        </tr></thead>
+        <tbody>
+        {% for o in recent_orders %}
+        <tr>
+          <td><a href="{{ url_for('admin_order_detail', oid=o.id) }}" style="color:var(--blue);font-weight:600">#{{ o.id }}</a></td>
+          <td>
+            <strong>{{ o.name }}</strong><br>
+            <span style="font-size:12px;color:var(--g400)">{{ o.email }}</span>
+          </td>
+          <td>{{ o.total_items }}</td>
+          <td><span class="badge status-{{ o.status }}">{{ o.status }}</span></td>
+          <td style="font-size:12px;color:var(--g400)">{{ o.created_at[:10] }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="admin-empty"><div class="admin-empty-icon">🛒</div><p>Sin pedidos todavía</p></div>
+    {% endif %}
+  </div>
+
+  <!-- CONTACTOS RECIENTES -->
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <div class="admin-card-title">Contactos recientes</div>
+      <a href="{{ url_for('admin_contacts') }}" class="btn btn-secondary btn-sm">Ver todos →</a>
+    </div>
+    {% if recent_contacts %}
+    <div style="padding:8px 0">
+      {% for c in recent_contacts %}
+      <div style="padding:12px 24px;border-bottom:1px solid var(--g100);display:flex;align-items:flex-start;gap:12px">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+            <strong style="font-size:13.5px">{{ c.name }}</strong>
+            {% if not c.read %}<span class="badge badge-red" style="font-size:10px">Nuevo</span>{% endif %}
+          </div>
+          <div style="font-size:12px;color:var(--g400)">{{ c.email }}</div>
+          {% if c.subject %}<div style="font-size:12.5px;color:var(--g600);margin-top:4px">{{ c.subject }}</div>{% endif %}
+        </div>
+        <div style="font-size:11px;color:var(--g400);flex-shrink:0">{{ c.created_at[:10] }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="admin-empty"><div class="admin-empty-icon">✉️</div><p>Sin contactos todavía</p></div>
+    {% endif %}
+  </div>
+
+</div>
+
+<!-- QUICK ACTIONS -->
+<div class="admin-card" style="margin-top:20px">
+  <div class="admin-card-header"><div class="admin-card-title">Accesos rápidos</div></div>
+  <div class="admin-card-body" style="display:flex;gap:12px;flex-wrap:wrap">
+    <a href="{{ url_for('admin_product_new') }}" class="btn btn-secondary">📦 Nuevo producto</a>
+    <a href="{{ url_for('admin_category_new') }}" class="btn btn-secondary">🏷️ Nueva categoría</a>
+    <a href="{{ url_for('admin_news_new') }}" class="btn btn-secondary">📰 Nueva novedad</a>
+    <a href="{{ url_for('admin_user_new') }}" class="btn btn-secondary">👤 Nuevo usuario</a>
+    <a href="{{ url_for('admin_orders', status='pending') }}" class="btn btn-secondary">🔔 Pedidos pendientes</a>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary" target="_blank">🌐 Ver sitio →</a>
+  </div>
+</div>
+
+{% endblock %}

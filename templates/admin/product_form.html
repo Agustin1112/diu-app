@@ -1,0 +1,125 @@
+{% extends 'admin/base.html' %}
+{% block title %}{{ 'Editar' if prod else 'Nuevo' }} producto{% endblock %}
+{% block page_title %}{{ 'Editar producto' if prod else 'Nuevo producto' }}{% endblock %}
+
+{% block breadcrumb %}
+<div class="admin-breadcrumb">
+  <a href="{{ url_for('admin_products') }}">Productos</a> › {{ 'Editar' if prod else 'Nuevo' }}
+</div>
+{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ url_for('admin_products') }}" class="btn btn-secondary">← Volver</a>
+{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:flex-start">
+
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <!-- INFO BÁSICA -->
+      <div class="admin-card">
+        <div class="admin-card-header"><div class="admin-card-title">Información básica</div></div>
+        <div class="admin-card-body">
+          <div style="display:grid;gap:16px">
+            <div class="form-group">
+              <label class="form-label">Nombre del producto *</label>
+              <input type="text" name="name" class="form-input" required
+                     value="{{ prod.name if prod else '' }}" placeholder="Ej: Alcohol etílico 96°">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Descripción</label>
+              <textarea name="description" class="form-textarea" rows="3"
+                        placeholder="Descripción breve del producto">{{ prod.description if prod else '' }}</textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+              <div class="form-group">
+                <label class="form-label">Unidad / Presentación</label>
+                <input type="text" name="unit" class="form-input"
+                       value="{{ prod.unit if prod else '' }}" placeholder="Ej: 1 litro, 5 kg">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Precio (opcional)</label>
+                <input type="number" name="price" class="form-input" step="0.01" min="0"
+                       value="{{ prod.price if prod and prod.price else '' }}" placeholder="0.00">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Stock</label>
+                <input type="number" name="stock" class="form-input" min="0"
+                       value="{{ prod.stock if prod else '0' }}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMAGEN -->
+      <div class="admin-card">
+        <div class="admin-card-header"><div class="admin-card-title">Imagen y presentación</div></div>
+        <div class="admin-card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="form-group">
+              <label class="form-label">Ícono (emoji)</label>
+              <input type="text" name="icon" class="form-input"
+                     value="{{ prod.icon if prod else '📦' }}" placeholder="📦">
+              <span class="form-hint">Usá un emoji para representar el producto</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Imagen (archivo)</label>
+              <input type="file" name="image" class="form-input" accept="image/*">
+              {% if prod and prod.image %}
+              <span class="form-hint">Imagen actual: {{ prod.image }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR OPTIONS -->
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div class="admin-card">
+        <div class="admin-card-header"><div class="admin-card-title">Organización</div></div>
+        <div class="admin-card-body" style="display:flex;flex-direction:column;gap:16px">
+          <div class="form-group">
+            <label class="form-label">Categoría</label>
+            <select name="category_id" class="form-select">
+              <option value="">Sin categoría</option>
+              {% for c in cats %}
+              <option value="{{ c.id }}"
+                {% if prod and prod.category_id == c.id %}selected{% endif %}>
+                {{ c.icon }} {{ c.name }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="form-check">
+              <input type="checkbox" name="featured" value="1"
+                     {% if prod and prod.featured %}checked{% endif %}>
+              ⭐ Producto destacado
+            </label>
+          </div>
+          <div>
+            <label class="form-check">
+              <input type="checkbox" name="active" value="1"
+                     {% if not prod or prod.active %}checked{% endif %}>
+              ✅ Producto activo (visible en tienda)
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="submit" class="btn btn-primary" style="justify-content:center">
+          {{ '💾 Guardar cambios' if prod else '✓ Crear producto' }}
+        </button>
+        <a href="{{ url_for('admin_products') }}" class="btn btn-secondary" style="justify-content:center">
+          Cancelar
+        </a>
+      </div>
+    </div>
+
+  </div>
+</form>
+{% endblock %}

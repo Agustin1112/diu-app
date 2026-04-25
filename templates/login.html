@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Iniciar sesión{% endblock %}
+{% block content %}
+<div style="min-height:100vh;padding-top:var(--nav-h);background:var(--diu-palest);display:flex;align-items:center;justify-content:center">
+  <div style="width:100%;max-width:420px;padding:24px">
+    <div style="background:var(--white);border-radius:var(--r-xl);border:1px solid var(--gray-200);padding:40px;box-shadow:var(--shadow-md)">
+      <div style="text-align:center;margin-bottom:32px">
+        <div style="font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--diu-navy)">DIU</div>
+        <h1 style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--diu-navy);margin-top:8px">Iniciar sesión</h1>
+        <p style="font-size:14px;color:var(--gray-600);margin-top:4px">Accedé a tu cuenta</p>
+      </div>
+      <form method="post" style="display:flex;flex-direction:column;gap:16px">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-input" required placeholder="correo@ejemplo.com" autofocus>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contraseña</label>
+          <input type="password" name="password" class="form-input" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:13px">
+          Ingresar →
+        </button>
+      </form>
+      <div style="text-align:center;margin-top:20px;font-size:13.5px;color:var(--gray-600)">
+        ¿No tenés cuenta? <a href="{{ url_for('register') }}" style="color:var(--diu-blue);font-weight:500">Registrate</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

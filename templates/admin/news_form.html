@@ -1,0 +1,57 @@
+{% extends 'admin/base.html' %}
+{% block title %}{{ 'Editar' if item else 'Nueva' }} novedad{% endblock %}
+{% block page_title %}{{ 'Editar novedad' if item else 'Nueva novedad' }}{% endblock %}
+{% block breadcrumb %}<div class="admin-breadcrumb"><a href="{{ url_for('admin_news') }}">Novedades</a> › {{ 'Editar' if item else 'Nueva' }}</div>{% endblock %}
+{% block topbar_actions %}<a href="{{ url_for('admin_news') }}" class="btn btn-secondary">← Volver</a>{% endblock %}
+{% block content %}
+<div style="max-width:680px">
+<form method="post">
+  <div class="admin-card">
+    <div class="admin-card-header"><div class="admin-card-title">Contenido</div></div>
+    <div class="admin-card-body" style="display:flex;flex-direction:column;gap:16px">
+      <div class="form-group">
+        <label class="form-label">Título *</label>
+        <input type="text" name="title" class="form-input" required value="{{ item.title if item else '' }}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Resumen</label>
+        <textarea name="summary" class="form-textarea" rows="2">{{ item.summary if item else '' }}</textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contenido completo (opcional)</label>
+        <textarea name="content" class="form-textarea" rows="5">{{ item.content if item else '' }}</textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+        <div class="form-group">
+          <label class="form-label">Badge / Etiqueta</label>
+          <input type="text" name="badge" class="form-input" value="{{ item.badge if item else '' }}" placeholder="Ej: Novedades">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color del badge</label>
+          <select name="badge_color" class="form-select">
+            <option value="badge-navy"  {% if item and item.badge_color=='badge-navy'  %}selected{% endif %}>Azul oscuro</option>
+            <option value="badge-blue"  {% if item and item.badge_color=='badge-blue'  %}selected{% endif %}>Azul</option>
+            <option value="badge-green" {% if item and item.badge_color=='badge-green' %}selected{% endif %}>Verde</option>
+            <option value="badge-amber" {% if item and item.badge_color=='badge-amber' %}selected{% endif %}>Ámbar</option>
+            <option value="badge-teal"  {% if item and item.badge_color=='badge-teal'  %}selected{% endif %}>Teal</option>
+            <option value="badge-red"   {% if item and item.badge_color=='badge-red'   %}selected{% endif %}>Rojo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ícono (emoji)</label>
+          <input type="text" name="icon" class="form-input" value="{{ item.icon if item else '📰' }}">
+        </div>
+      </div>
+      <label class="form-check">
+        <input type="checkbox" name="active" value="1" {% if not item or item.active %}checked{% endif %}>
+        Novedad activa (visible en el sitio)
+      </label>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:16px">
+    <button type="submit" class="btn btn-primary">{{ '💾 Guardar' if item else '✓ Crear' }}</button>
+    <a href="{{ url_for('admin_news') }}" class="btn btn-secondary">Cancelar</a>
+  </div>
+</form>
+</div>
+{% endblock %}

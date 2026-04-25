@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}{{ prod.name }}{% endblock %}
+{% block content %}
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="{{ url_for('index') }}">Inicio</a><span class="breadcrumb-sep">›</span>
+      <a href="{{ url_for('shop') }}">Tienda</a><span class="breadcrumb-sep">›</span>
+      {% if prod.cat_name %}<a href="{{ url_for('shop', cat=prod.cat_slug) }}">{{ prod.cat_name }}</a><span class="breadcrumb-sep">›</span>{% endif %}
+      <span>{{ prod.name }}</span>
+    </div>
+  </div>
+</div>
+
+<section class="section-pad">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:flex-start">
+
+      <!-- IMAGE -->
+      <div style="background:var(--gray-50);border-radius:var(--r-xl);border:1px solid var(--gray-200);aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:100px">
+        {% if prod.image %}
+        <img src="{{ url_for('static', filename='img/uploads/' + prod.image) }}" alt="{{ prod.name }}" style="max-width:80%;border-radius:var(--r-lg)">
+        {% else %}
+        {{ prod.icon }}
+        {% endif %}
+      </div>
+
+      <!-- INFO -->
+      <div>
+        {% if prod.cat_name %}
+        <span class="badge" style="background:{{ prod.color }}22;color:{{ prod.color }};margin-bottom:16px">{{ prod.cat_icon }} {{ prod.cat_name }}</span>
+        {% endif %}
+        <h1 class="title-lg" style="margin-bottom:12px">{{ prod.name }}</h1>
+        {% if prod.unit %}
+        <p style="font-size:15px;color:var(--gray-600);margin-bottom:16px">Presentación: <strong>{{ prod.unit }}</strong></p>
+        {% endif %}
+        {% if prod.description %}
+        <p class="body-lg" style="margin-bottom:24px">{{ prod.description }}</p>
+        {% endif %}
+
+        <div style="background:var(--diu-palest);border-radius:var(--r-lg);padding:20px 24px;margin-bottom:24px">
+          <div style="font-size:12px;color:var(--gray-400);margin-bottom:4px">Precio</div>
+          <div style="font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--diu-navy)">
+            {% if prod.price %}${{ "%.2f"|format(prod.price) }}{% else %}Consultar precio{% endif %}
+          </div>
+          {% if prod.stock > 0 %}
+          <div style="font-size:13px;color:var(--div-vet, #1e6c45);margin-top:6px">✓ En stock ({{ prod.stock }} disponibles)</div>
+          {% else %}
+          <div style="font-size:13px;color:var(--gray-400);margin-top:6px">Consultar disponibilidad</div>
+          {% endif %}
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary btn-lg js-add-cart" data-id="{{ prod.id }}" style="flex:1">
+            🛒 Agregar al carrito
+          </button>
+          <a href="{{ url_for('contacto') }}" class="btn btn-secondary btn-lg">Consultar</a>
+        </div>
+      </div>
+    </div>
+
+    {% if related %}
+    <div style="margin-top:64px">
+      <h2 class="title-md" style="margin-bottom:24px">Productos relacionados</h2>
+      <div class="products-grid">
+        {% for p in related %}
+        <div class="product-card">
+          <a href="{{ url_for('product_detail', slug=p.slug) }}">
+            <div class="product-img" style="background:{{ p.color or '#f0f6fc' }}22">{{ p.icon }}</div>
+          </a>
+          <div class="product-body">
+            <span class="badge" style="background:{{ p.color }}22;color:{{ p.color }}">{{ p.cat_name }}</span>
+            <h4><a href="{{ url_for('product_detail', slug=p.slug) }}" style="color:inherit">{{ p.name }}</a></h4>
+          </div>
+          <div class="product-footer">
+            <div class="product-price">{% if p.price %}${{ "%.2f"|format(p.price) }}{% else %}Consultar{% endif %}</div>
+            <button class="add-to-cart js-add-cart" data-id="{{ p.id }}">+</button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Error {{ code }}{% endblock %}
+{% block content %}
+<div style="min-height:80vh;display:flex;align-items:center;justify-content:center;padding-top:var(--nav-h)">
+  <div style="text-align:center;padding:32px">
+    <div style="font-family:var(--font-display);font-size:80px;font-weight:800;color:var(--diu-pale);line-height:1">{{ code }}</div>
+    <h1 style="font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--diu-navy);margin-top:8px">{{ msg }}</h1>
+    <p style="color:var(--gray-600);margin-top:8px;margin-bottom:28px">Lo sentimos, algo salió mal.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">Volver al inicio</a>
+  </div>
+</div>
+{% endblock %}

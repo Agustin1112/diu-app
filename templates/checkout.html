@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="{{ url_for('index') }}">Inicio</a><span class="breadcrumb-sep">›</span><a href="{{ url_for('shop') }}">Tienda</a><span class="breadcrumb-sep">›</span><span>Checkout</span></div>
+    <h1 style="font-family:var(--font-display);font-size:36px;font-weight:800;color:var(--diu-navy);margin-top:12px">Solicitar cotización</h1>
+  </div>
+</div>
+<section class="section-pad">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:flex-start">
+      <form method="post" style="display:flex;flex-direction:column;gap:20px">
+        <div class="contact-form-card">
+          <h2>Tus datos</h2>
+          <p>Completá tus datos para que podamos enviarte la cotización.</p>
+          <div style="display:flex;flex-direction:column;gap:16px;margin-top:24px">
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Nombre *</label><input type="text" name="name" class="form-input" required value="{{ current_user_name or '' }}"></div>
+              <div class="form-group"><label class="form-label">Email *</label><input type="email" name="email" class="form-input" required></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Teléfono</label><input type="tel" name="phone" class="form-input"></div>
+              <div class="form-group"><label class="form-label">Empresa / Institución</label><input type="text" name="company" class="form-input"></div>
+            </div>
+            <div class="form-group"><label class="form-label">Notas adicionales</label><textarea name="notes" class="form-textarea" rows="3" placeholder="Cantidades, especificaciones, urgencia..."></textarea></div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" style="justify-content:center">Enviar solicitud de cotización →</button>
+      </form>
+
+      <!-- CART SUMMARY -->
+      <div class="contact-form-card" style="position:sticky;top:calc(var(--nav-h) + 20px)">
+        <h2 style="margin-bottom:16px">Tu pedido</h2>
+        {% for item in cart %}
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-100)">
+          <span style="font-size:24px">{{ item.icon }}</span>
+          <div style="flex:1">
+            <div style="font-weight:500;font-size:14px;color:var(--diu-navy)">{{ item.name }}</div>
+            <div style="font-size:12px;color:var(--gray-400)">{{ item.unit }} · x{{ item.qty }}</div>
+          </div>
+        </div>
+        {% endfor %}
+        <div style="padding-top:16px;display:flex;justify-content:space-between;font-family:var(--font-display);font-weight:700">
+          <span>Total ítems</span>
+          <span>{{ cart|sum(attribute='qty') }}</span>
+        </div>
+        <p style="font-size:12px;color:var(--gray-400);margin-top:10px">Los precios se informan por email una vez recibida la solicitud.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
