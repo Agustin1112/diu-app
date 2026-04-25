@@ -26,7 +26,12 @@ app = Flask(__name__)
 # Generá una con: python -c "import secrets; print(secrets.token_hex(32))"
 app.secret_key = os.environ.get('SECRET_KEY') or secrets.token_hex(32)
 
-app.config['DATABASE']           = os.path.join(app.instance_path, 'diu.db')
+# 🔥 DB SIEMPRE FUNCIONA EN LOCAL Y EN DEPLOY
+# Podés cambiar la carpeta con la variable DB_FOLDER si tu hosting lo permite.
+db_folder = os.environ.get('DB_FOLDER') or os.path.join(os.getcwd(), 'instance')
+os.makedirs(db_folder, exist_ok=True)
+
+app.config['DATABASE']           = os.path.join(db_folder, 'diu.db')
 app.config['UPLOAD_FOLDER']      = os.path.join('static', 'img', 'uploads')
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 ALLOWED_EXT = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
@@ -44,10 +49,24 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # ──────────────────────────────────────────────
 def get_db():
     if 'db' not in g:
-        g.db = sqlite3.connect(app.config['DATABASE'],
+        db_path = app.config['DATABASE']
+
+        # 🔥 asegura que exista la carpeta de la DB
+        os.makedirs(os.path.dirname(db_path), exist_ok=True)
+
+        # 🔥 detecta si la DB no existía antes de conectarse
+        first_time = not os.path.exists(db_path)
+
+        g.db = sqlite3.connect(db_path,
                                detect_types=sqlite3.PARSE_DECLTYPES)
         g.db.row_factory = sqlite3.Row
         g.db.execute("PRAGMA foreign_keys = ON")
+
+        if first_time:
+            print("🚀 DB no existía → creando tablas...")
+            init_db()
+            print("✅ Tablas creadas correctamente")
+
     return g.db
 
 @app.teardown_appcontext
@@ -836,7 +855,9 @@ def not_found(e):
 # INICIALIZAR DB — corre siempre (local y producción con gunicorn)
 # ──────────────────────────────────────────────
 with app.app_context():
+    print("🚀 Inicializando DB (startup)...")
     init_db()
+    print("✅ DB inicializada correctamente")
 
 # ──────────────────────────────────────────────
 # MAIN (solo desarrollo local)
