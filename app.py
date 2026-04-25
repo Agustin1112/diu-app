@@ -2,7 +2,7 @@
 DIU — Droguería Industrial Uruguaya
 Flask App — Sitio Web + Panel Admin
 """
-# CAMBIO DE PRUEBA
+
 import os, sqlite3, hashlib, secrets, json
 from functools import wraps
 from datetime import datetime
@@ -870,4 +870,4 @@ if __name__ == '__main__':
     print(f"  Admin email: {ADMIN_EMAIL}")
     print("  (contraseña definida en variable ADMIN_PASSWORD)")
     print("="*50 + "\n")
-    app.run(debug=True, port=5000)# FORZAR CAMBIO 
+    app.run(debug=True, port=5000)
