@@ -870,4 +870,4 @@ if __name__ == '__main__':
     print(f"  Admin email: {ADMIN_EMAIL}")
     print("  (contraseña definida en variable ADMIN_PASSWORD)")
     print("="*50 + "\n")
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000)# FORZAR CAMBIO 
