@@ -2,7 +2,7 @@
 DIU — Droguería Industrial Uruguaya
 Flask App — Sitio Web + Panel Admin
 """
-
+# CAMBIO DE PRUEBA
 import os, sqlite3, hashlib, secrets, json
 from functools import wraps
 from datetime import datetime
