@@ -833,11 +833,15 @@ def not_found(e):
     return render_template('error.html', code=404, msg="Página no encontrada"), 404
 
 # ──────────────────────────────────────────────
-# MAIN
+# INICIALIZAR DB — corre siempre (local y producción con gunicorn)
+# ──────────────────────────────────────────────
+with app.app_context():
+    init_db()
+
+# ──────────────────────────────────────────────
+# MAIN (solo desarrollo local)
 # ──────────────────────────────────────────────
 if __name__ == '__main__':
-    with app.app_context():
-        init_db()
     print("\n" + "="*50)
     print("  DIU — Droguería Industrial Uruguaya")
     print("  http://localhost:5000")
