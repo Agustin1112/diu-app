@@ -1409,3 +1409,50 @@ ul { list-style: none; }
   font-size: 16px; color: inherit; opacity: .5;
 }
 .flash-close:hover { opacity: 1; }
+
+/* ── MOBILE MENU ─────────────────────────────── */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: var(--nav-h);
+  left: 0; right: 0;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-100);
+  box-shadow: var(--shadow-md);
+  z-index: 99;
+  flex-direction: column;
+  padding: 12px 0 20px;
+}
+.mobile-menu.open { display: flex; }
+
+.mobile-menu a {
+  padding: 13px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--gray-600);
+  border-bottom: 1px solid var(--gray-50);
+  transition: background var(--fast);
+}
+.mobile-menu a:hover,
+.mobile-menu a.active { background: var(--diu-palest); color: var(--diu-blue); }
+
+.mobile-menu-footer {
+  padding: 16px 24px 0;
+  display: flex;
+  gap: 10px;
+}
+
+/* Hamburger open state */
+.hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+  .nav-actions .cart-btn { display: flex; } /* keep cart button visible */
+}

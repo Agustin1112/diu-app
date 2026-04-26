@@ -46,9 +46,28 @@
         <span class="cart-count" id="cart-count" style="display:none">0</span>
       </button>
       <a href="{{ url_for('shop') }}" class="btn btn-primary btn-sm">Ver tienda</a>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="{{ url_for('index') }}"    class="{% if request.endpoint=='index' %}active{% endif %}">🏠 Inicio</a>
+  <a href="{{ url_for('empresa') }}"  class="{% if request.endpoint=='empresa' %}active{% endif %}">🏢 La empresa</a>
+  <a href="{{ url_for('shop') }}"     class="{% if request.endpoint=='shop' %}active{% endif %}">🛍️ Tienda</a>
+  <a href="{{ url_for('novedades') }}" class="{% if request.endpoint=='novedades' %}active{% endif %}">📰 Novedades</a>
+  <a href="{{ url_for('contacto') }}" class="{% if request.endpoint=='contacto' %}active{% endif %}">✉️ Contacto</a>
+  <div class="mobile-menu-footer">
+    {% if current_user_id %}
+    <a href="{{ url_for('logout') }}" class="btn btn-secondary btn-sm" style="flex:1;justify-content:center">Salir</a>
+    {% else %}
+    <a href="{{ url_for('login') }}" class="btn btn-primary btn-sm" style="flex:1;justify-content:center">Ingresar</a>
+    {% endif %}
+  </div>
+</div>
 
 <!-- FLASH MESSAGES -->
 {% with messages = get_flashed_messages(with_categories=true) %}
